@@ -1,87 +1,69 @@
-#include"../inc/stack.h"
+#include "../inc/stack.h"
 
 Stack* InitStack(size_t size)
 {
-    if(size<1)
-    {
-        return NULL;
-    }
-    if(size>MAX_SIZE)
-    {
-        size=MAX_SIZE;
-    }
-    
-    Stack* stack=(Stack*)malloc(sizeof(Stack)*size);
-    if(!stack)
-    {
-        return NULL;
-    }
-    stack->data=(float*)malloc(sizeof(float)*size);
-    if(!stack->data)
-    {
-        free(stack);
-        return NULL;
-    }
-    stack->size=size;
-    stack->top=0;
+	if (size < 1) {
+		return NULL;
+	}
+	if (size > MAX_SIZE) {
+		size = MAX_SIZE;
+	}
 
-    return stack;
+	Stack* stack = (Stack*) malloc(sizeof(Stack));
+	if (!stack) {
+		return NULL;
+	}
+	stack->data = (float*) malloc(sizeof(float) * size);
+	if (!stack->data) {
+		free(stack);
+		return NULL;
+	}
+	stack->size = size;
+	stack->top	= 0;
+
+	return stack;
 }
 
+bool IfStackEmpty(const Stack* stack) { return (stack->top == 0); }
 
-bool IfStackEmpty(const Stack *stack)
+bool IfStackFull(const Stack* stack) { return (stack->top == stack->size); }
+
+bool Push(Stack* stack, float data)
 {
-    return (stack->top==0);
+	if (IfStackFull(stack)) {
+		return false;
+	}
+	stack->data[stack->top++] = data;
+	return true;
 }
 
-bool IfStackFull(const Stack *stack)
+bool Pop(Stack* stack, float* data)
 {
-    return (stack->top==stack->size);
+	if (IfStackEmpty(stack)) {
+		return false;
+	}
+	*data = stack->data[--stack->top];
+	return true;
 }
 
-bool Push(Stack *stack,float data)
+float GetTop(const Stack* stack)
 {
-    if(IfStackFull(stack))
-    {
-        return false;
-    }
-    stack->data[stack->top++]=data;
-    return true;
+	if (IfStackEmpty(stack)) {
+		return 0;
+	}
+	return stack->data[stack->top - 1];
 }
 
-bool Pop(Stack *stack,float *data)
+void ClearStack(Stack* stack) { stack->top = 0; }
+
+bool DeleteStack(Stack* stack)
 {
-    if(IfStackEmpty(stack))
-    {
-        return false;
-    }
-    *data=stack->data[--stack->top];
-    return true;
+	if (stack == NULL)
+		return false;
+
+	free(stack->data);
+	stack->data = NULL;
+	free(stack);
+	stack = NULL;
+	return true;
 }
-
-float GetTop(const Stack *stack)
-{
-    if(IfStackEmpty(stack))
-    {
-        return 0;
-    }
-    return stack->data[stack->top-1];
-}
-
-void ClearStack(Stack *stack)
-{
-    stack->top=0;
-}
-
-bool DeleteStack(Stack *stack)
-{
-    if(stack==NULL)
-        return false;
-
-    free(stack->data);
-    stack->data=NULL;
-    free(stack);
-    stack=NULL;
-    return true;
-}
-
