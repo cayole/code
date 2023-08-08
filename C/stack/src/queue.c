@@ -21,7 +21,7 @@ Queue* InitQueue(size_t size)
 	queue->size								  = size;
 	return queue;
 }
-bool IfQueueFull(const Queue* queue) { return ((queue->rear + 1) % (queue->size) == queue->size); }
+bool IfQueueFull(const Queue* queue) { return ((queue->rear + 1) % (queue->size) == queue->front); }
 bool IfQueueEmpty(const Queue* queue) { return (queue->front == queue->rear); }
 
 bool DeQueue(Queue* queue, float* data)
