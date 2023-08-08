@@ -4,9 +4,9 @@
 #define MAX_SIZE 25
 
 typedef struct Stack {
-	float* data;	// 栈顶指针
-	size_t size;	// 栈大小
-	size_t top;		// 栈顶位置
+	float* data;
+	size_t size;
+	size_t top;
 } Stack;
 Stack* InitStack(size_t size);
 bool   IfStackEmpty(const Stack* stack);
