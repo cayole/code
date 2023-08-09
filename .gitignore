@@ -1,5 +1,4 @@
-build
 .vscode
-.clang-tidy
+build
 .clang-format
-
+.clang-tidy
