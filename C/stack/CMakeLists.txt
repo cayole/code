@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20.0)
-project(stack)
+project(test)
 aux_source_directory(src SRC)
 include_directories(inc)
-add_executable(stack ${SRC})
+add_executable(test ${SRC})

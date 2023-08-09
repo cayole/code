@@ -1,14 +1,18 @@
 #include "../inc/queue.h"
+
+/// @brief 创建并初始化队列
+/// @param size
+/// @return 空队列
 Queue* InitQueue(size_t size)
 {
 	if (size < 1) {
 		return NULL;
 	}
-	if (size > MAX_SIZE) {
-		size = MAX_SIZE;
+	if (size > MAX_Queue_SIZE) {
+		size = MAX_Queue_SIZE;
 	}
 
-	Queue* queue = (Queue*) malloc(sizeof(Queue));
+	Queue* queue = (Queue*) malloc(sizeof(Queue));	  // 创建队列
 	if (!queue) {
 		return NULL;
 	}
@@ -17,43 +21,69 @@ Queue* InitQueue(size_t size)
 		free(queue);
 		return NULL;
 	}
-	queue->front = queue->rear = queue->count = 0;
-	queue->size								  = size;
+	queue->front = queue->rear = queue->count = 0;		 // 初始化
+	queue->size								  = size;	 // 初始化
 	return queue;
 }
-bool IfQueueFull(const Queue* queue) { return ((queue->rear + 1) % (queue->size) == queue->front); }
-bool IfQueueEmpty(const Queue* queue) { return (queue->front == queue->rear); }
 
+/// @brief 判段队列是否为满
+/// @param queue
+/// @return bool
+bool IfQueueFull(const Queue* queue) { return (queue->count == queue->size); }
+
+/// @brief 判断队列是否为空
+/// @param queue
+/// @return bool
+bool IfQueueEmpty(const Queue* queue) { return (queue->count == 0); }
+
+/// @brief 出队
+/// @param queue
+/// @param data
+/// @return 是否成功
 bool DeQueue(Queue* queue, float* data)
 {
 	if (IfQueueEmpty(queue)) {
-		return false;
+		return false;								// 若队列为空则失败
 	}
-	*data		  = queue->data[queue->front++];
-	queue->front %= queue->size;
+	*data		  = queue->data[queue->front++];	// 获取数据
+	queue->front %= queue->size;					// 移动队头
+	queue->count--;
 	return true;
 }
 
+/// @brief 入队
+/// @param queue
+/// @param data
+/// @return 是否成功
 bool EnQueue(Queue* queue, float data)
 {
 	if (IfQueueFull(queue)) {
-		return false;
+		return false;							  // 若队列已满则成功
 	}
-	queue->data[queue->rear++]	= data;
-	queue->rear				   %= queue->size;
+	queue->data[queue->rear++]	= data;			  // 加入数据
+	queue->rear				   %= queue->size;	  // 移动队尾
 	queue->count++;
 	return true;
 }
 
-void ClearQueue(Queue* queue) { queue->rear = queue->front = 0; }
+/// @brief 清空队列
+/// @param queue
+void ClearQueue(Queue* queue)
+{
+	queue->rear = queue->front = 0;
+	queue->count			   = 0;
+}
 
+/// @brief 销毁队列
+/// @param queue
+/// @return 是否成功
 bool DeleteQueue(Queue* queue)
 {
 	if (!queue)
 		return false;
-	free(queue->data);
+	free(queue->data);	  // 释放队列内数据指针
 	queue->data = NULL;
-	free(queue);
-	queue->data;
+	free(queue);		  // 释放队列指针
+	queue = NULL;
 	return true;
 }
